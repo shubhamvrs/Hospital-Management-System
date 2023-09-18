@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System</title>
+    <style>
+        /* Add your CSS styles here */
+    </style>
+</head>
+<body>
+    <h1>Hospital Management System</h1>
+
+    <!-- Patients Section -->
+    <section id="patients">
+        <h2>Patients</h2>
+        <!-- Patient Records Management Interface -->
+        <div>
+            <label for="patientName">Patient Name:</label>
+            <input type="text" id="patientName"><br>
+
+            <label for="patientDOB">Date of Birth:</label>
+            <input type="date" id="patientDOB"><br>
+
+            <!-- Add more fields as needed for patient information -->
+
+            <button id="addPatient">Add Patient</button>
+        </div>
+
+        <!-- Display Patient Records -->
+        <div id="patientList">
+            <!-- Patient records will be displayed here -->
+        </div>
+    </section>
+
+    <!-- Appointments Section -->
+    <section id="appointments">
+        <h2>Appointments</h2>
+        <!-- Basic Appointment Management Interface -->
+        <div>
+            <label for="patientSelect">Select Patient:</label>
+            <select id="patientSelect"></select><br>
+
+            <label for="appointmentDate">Appointment Date:</label>
+            <input type="date" id="appointmentDate"><br>
+
+            <!-- Add more fields as needed for appointment details -->
+
+            <button id="scheduleAppointment">Schedule Appointment</button>
+        </div>
+
+        <!-- Display Appointments -->
+        <div id="appointmentList">
+            <!-- Appointments will be displayed here -->
+        </div>
+    </section>
+
+    <script>
+        // This is where you'd typically integrate with a backend using APIs for data storage and retrieval.
+        // You'd also implement user authentication and authorization here.
+
+        // Mock data for patient records and appointments
+        let patients = [];
+        let appointments = [];
+
+        const patientNameInput = document.getElementById("patientName");
+        const patientDOBInput = document.getElementById("patientDOB");
+        const addPatientButton = document.getElementById("addPatient");
+        const patientList = document.getElementById("patientList");
+
+        const patientSelect = document.getElementById("patientSelect");
+        const appointmentDateInput = document.getElementById("appointmentDate");
+        const scheduleAppointmentButton = document.getElementById("scheduleAppointment");
+        const appointmentList = document.getElementById("appointmentList");
+
+        // Function to display patient records
+        function displayPatients() {
+            patientList.innerHTML = "";
+
+            patients.forEach((patient, index) => {
+                const listItem = document.createElement("div");
+                listItem.innerHTML = `
+                    <strong>${index + 1}. ${patient.name}</strong> (DOB: ${patient.dob})
+                `;
+                patientList.appendChild(listItem);
+
+                // Populate the patient select dropdown for appointment scheduling
+                const option = document.createElement("option");
+                option.value = index;
+                option.textContent = patient.name;
+                patientSelect.appendChild(option);
+            });
+        }
+
+        // Function to add a new patient
+        addPatientButton.addEventListener("click", () => {
+            const name = patientNameInput.value;
+            const dob = patientDOBInput.value;
+
+            if (name && dob) {
+                patients.push({ name, dob });
+
+                // Clear input fields
+                patientNameInput.value = "";
+                patientDOBInput.value = "";
+
+                displayPatients();
+            }
+        });
+
+        // Function to display appointments
+        function displayAppointments() {
+            appointmentList.innerHTML = "";
+
+            appointments.forEach((appointment, index) => {
+                const listItem = document.createElement("div");
+                listItem.innerHTML = `
+                    <strong>${index + 1}. ${appointment.patientName}</strong> (Date: ${appointment.date})
+                `;
+                appointmentList.appendChild(listItem);
+            });
+        }
+
+        // Function to schedule a new appointment
+        scheduleAppointmentButton.addEventListener("click", () => {
+            const patientIndex = patientSelect.value;
+            const patient = patients[patientIndex];
+            const date = appointmentDateInput.value;
+
+            if (patient && date) {
+                appointments.push({ patientName: patient.name, date });
+
+                // Clear input fields
+                appointmentDateInput.value = "";
+
+                displayAppointments();
+            }
+        });
+
+        // Initial display of patients and appointments
+        displayPatients();
+        displayAppointments();
+    </script>
+</body>
+</html>
